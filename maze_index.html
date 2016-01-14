@@ -1,0 +1,186 @@
+<html>
+<title>
+Circular_Tetris
+</title>
+<link rel="stylesheet" href="master.css" />  
+<script>
+var div = new Array(15);
+var xcord=500,ycord=500;
+var e_angle=2*Math.PI/15,width=25; 
+var m = new Array(15);
+var l=5;
+  for(var k=0;k<15;k++)
+   {
+    m[k]=[0,0,0,0,0,0,0,0,0,0];
+   
+    }
+
+
+ 	
+var matrix=new Array(15);
+window.onload =function()
+{
+init();
+};
+function init() {
+    drawmaze(m,0);
+   
+    context.font="40pt Calibri";
+    context.fillStyle="red";
+    context.fillText("CiRcUlAr TeTrIs",300,50);
+}
+function drawmaze(matrix,angle)
+{
+    for(i=0;i<15;i++)
+    {
+	for(j=0;j<10;j++)
+	{
+            
+  	    canvas = document.getElementById('myCanvas');
+	    context = canvas.getContext('2d');
+          
+            if(matrix && matrix[i][j]===1)
+             { 
+               activateCell(j, i);
+              }
+             
+  
+	    else 
+           { deactivateCell(j, i, angle);
+            }
+ 
+	}
+    }
+};
+
+function colorCell(j,i, color) {
+    
+    x=i*e_angle;
+    y=(j+3)*width;
+    
+    
+  
+    context.beginPath();
+    context.arc(xcord,ycord,y,x,x+e_angle,false);
+    context.arc(xcord,ycord,y+width,x+e_angle,x,true);
+    context.closePath();
+    context.fillStyle = color;
+    context.fill();
+    context.lineWidth = 1.3;
+    context.strokeStyle = '#000000';
+    context.stroke();
+
+} 
+function originalColor(j, i, angle ) {
+    
+    i=Math.abs((i+angle)%15);
+    
+    return 'rgb(' + Math.floor(255-25.5*i) + ',' + Math.floor(255-25.5*j) + ',0)';
+  
+}
+function activateCell(y,x) {
+    
+     
+    x=x+e_angle;
+    colorCell(y,x, 'black');
+}
+
+
+function deactivateCell(y,x, angle) {
+    if (!angle) angle = 0;
+    //colorCell(y, x, originalColor(y, x));
+    
+    x=x+e_angle;
+    colorCell(y, x, originalColor(y, x, angle));
+}
+function rotate(x) {
+
+	    drawmaze(m,x);	
+
+}
+makeShapes(3,6,3);
+
+
+function keyDown(event)
+{ 
+ if(event.keyCode==37)
+  { 
+
+    rotate(l);
+    l++;
+  }	
+ else if(event.keyCode==39)
+  { 
+    rotate(l);
+    l--;	
+  }
+}
+function makeShapes(x1,y1,z){
+   if(z==1)
+     makeZ(x1,y1);
+   else if(z==2)
+    makeL(x1,y1);
+   else if(z==3)
+    makeBox(x1,y1);
+   else if(z==4)
+    makeLine(x1,y1);
+   else if(z==5)
+    makeT(x1,y1);
+   else 
+    makeL1(x1,y1);
+};
+
+function makeZ(p,q)
+{
+m[p][q]=1;
+m[p+1][q]=1;
+m[p+1][q-1]=1;
+m[p+2][q-1]=1;
+}
+function makeL(p,q)
+{
+m[p][q]=1;
+m[p+1][q]=1;
+m[p+1][q-1]=1;
+m[p+1][q-2]=1;
+}
+function makeBox(p,q)
+{
+m[p][q]=1;
+m[p][q+1]=1;
+m[p+1][q]=1;
+m[p+1][q+1]=1;
+}
+function makeLine(p,q)
+{
+m[p][q]=1;
+m[p+1][q]=1;
+m[p+2][q]=1;
+m[p+3][q]=1;
+}  
+function makeT(p,q)
+{
+m[p][q]=1;
+m[p+1][q]=1;
+m[p+2][q]=1;
+m[p+1][q-1]=1;
+}  
+function makeL1(p,q)
+{
+m[p][q]=1;
+m[p][q+1]=1;
+m[p-1][q+1]=1;
+m[p-2][q+1]=1;
+}
+//function makeShape(x,y,type)
+//{
+ //if type z... n return id whether shape made or not}
+		
+</script>
+
+<body onKeyDown=keyDown(event)>
+  	<canvas id="myCanvas" width="1000" height="1000" >
+        We're sorry,but your browser does not support the HTML5 canvas tag..!!
+  	</canvas>
+</body>
+</html>
